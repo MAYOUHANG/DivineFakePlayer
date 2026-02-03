@@ -9,18 +9,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ChatTask implements Runnable {
 
     private final JavaPlugin plugin;
-    private final GhostManager ghostManager;
     private final MockAI mockAI;
 
-    public ChatTask(JavaPlugin plugin, GhostManager ghostManager, MockAI mockAI) {
+    public ChatTask(JavaPlugin plugin, MockAI mockAI) {
         this.plugin = plugin;
-        this.ghostManager = ghostManager;
         this.mockAI = mockAI;
     }
 
     @Override
     public void run() {
-        List<GhostPlayer> ghosts = ghostManager.getGhosts();
+        List<GhostPlayer> ghosts = GhostManager.getGhosts();
         if (ghosts.size() < 2) {
             return;
         }

@@ -12,24 +12,22 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class ConnectionListener implements Listener {
 
-    private final GhostManager ghostManager;
     private final PacketManager packetManager;
     private final DivineFakePlayer plugin;
 
-    public ConnectionListener(DivineFakePlayer plugin, GhostManager ghostManager, PacketManager packetManager) {
+    public ConnectionListener(DivineFakePlayer plugin, PacketManager packetManager) {
         this.plugin = plugin;
-        this.ghostManager = ghostManager;
         this.packetManager = packetManager;
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        for (GhostPlayer ghost : ghostManager.getGhosts()) {
+        for (GhostPlayer ghost : GhostManager.getGhosts()) {
             packetManager.sendTabListAdd(ghost, event.getPlayer());
         }
 
         double welcomeChance = plugin.getConfig().getDouble("events.welcome-chance", 0.6);
-        List<GhostPlayer> shuffled = new ArrayList<>(ghostManager.getGhosts());
+        List<GhostPlayer> shuffled = new ArrayList<>(GhostManager.getGhosts());
         Collections.shuffle(shuffled);
         int speakers = (int) Math.floor(shuffled.size() * welcomeChance);
         if (speakers <= 0) {

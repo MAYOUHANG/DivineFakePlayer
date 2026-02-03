@@ -1,6 +1,7 @@
 package com.divinefakeplayer;
 
 import net.milkbowl.vault.chat.Chat;
+import com.comphenix.protocol.ProtocolLibrary;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -24,10 +25,10 @@ public final class DivineFakePlayer extends JavaPlugin {
         int ghostCount = getConfig().getInt("ghost-count", 20);
         ghostManager.initializeGhosts(ghostCount);
         packetManager = new PacketManager(this);
-        getServer().getPluginManager().registerEvents(new ConnectionListener(this, ghostManager, packetManager), this);
-        getServer().getPluginManager().registerEvents(new MotdListener(ghostManager), this);
+        getServer().getPluginManager().registerEvents(new ConnectionListener(this, packetManager), this);
+        ProtocolLibrary.getProtocolManager().addPacketListener(new MotdListener(this));
         deepSeekService = new DeepSeekService(this);
-        smartChatManager = new SmartChatManager(this, ghostManager, deepSeekService);
+        smartChatManager = new SmartChatManager(this, deepSeekService);
         getServer().getPluginManager().registerEvents(new RealPlayerChatListener(smartChatManager), this);
         smartChatManager.startIdleChat();
         getLogger().info("DivineFakePlayer enabled.");
