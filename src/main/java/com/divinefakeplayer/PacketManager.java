@@ -8,7 +8,6 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -37,7 +36,7 @@ public class PacketManager {
         packet.getPlayerInfoDataLists().write(0, infoList);
         try {
             protocolManager.sendServerPacket(receiver, packet);
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             plugin.getLogger().severe("Failed to send tab list add packet: " + e.getMessage());
         }
     }
@@ -52,7 +51,7 @@ public class PacketManager {
         packet.getPlayerInfoDataLists().write(0, infoList);
         try {
             protocolManager.sendServerPacket(receiver, packet);
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             plugin.getLogger().severe("Failed to send tab list remove packet: " + e.getMessage());
         }
     }

@@ -8,11 +8,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class GhostManager {
 
+    private static GhostManager instance;
     private final JavaPlugin plugin;
     private final List<GhostPlayer> ghosts = new ArrayList<>();
 
     public GhostManager(JavaPlugin plugin) {
         this.plugin = plugin;
+        instance = this;
     }
 
     public void initializeGhosts(int count) {
@@ -22,8 +24,11 @@ public class GhostManager {
         }
     }
 
-    public List<GhostPlayer> getGhosts() {
-        return Collections.unmodifiableList(ghosts);
+    public static List<GhostPlayer> getGhosts() {
+        if (instance == null) {
+            return Collections.emptyList();
+        }
+        return Collections.unmodifiableList(instance.ghosts);
     }
 
     public void clearGhosts() {

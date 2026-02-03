@@ -11,12 +11,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class SmartChatManager {
 
     private final DivineFakePlayer plugin;
-    private final GhostManager ghostManager;
     private final DeepSeekService deepSeekService;
 
-    public SmartChatManager(DivineFakePlayer plugin, GhostManager ghostManager, DeepSeekService deepSeekService) {
+    public SmartChatManager(DivineFakePlayer plugin, DeepSeekService deepSeekService) {
         this.plugin = plugin;
-        this.ghostManager = ghostManager;
         this.deepSeekService = deepSeekService;
     }
 
@@ -34,7 +32,7 @@ public class SmartChatManager {
     }
 
     private void runIdleTick() {
-        List<GhostPlayer> ghosts = ghostManager.getGhosts();
+        List<GhostPlayer> ghosts = GhostManager.getGhosts();
         if (ghosts.isEmpty()) {
             return;
         }
@@ -51,7 +49,7 @@ public class SmartChatManager {
 
     public void triggerAI(String question) {
         deepSeekService.askAI(question, answer -> {
-            List<GhostPlayer> ghosts = new ArrayList<>(ghostManager.getGhosts());
+            List<GhostPlayer> ghosts = new ArrayList<>(GhostManager.getGhosts());
             if (ghosts.isEmpty()) {
                 return;
             }
