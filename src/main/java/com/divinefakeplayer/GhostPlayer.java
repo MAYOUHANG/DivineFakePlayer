@@ -11,6 +11,7 @@ public class GhostPlayer {
     private final String skinTexture;
     private final String skinSignature;
     private final String prefix;
+    private boolean isOnline;
 
     public GhostPlayer(String name, JavaPlugin plugin) {
         this.name = name;
@@ -25,6 +26,7 @@ public class GhostPlayer {
         } else {
             this.prefix = "";
         }
+        this.isOnline = true;
     }
 
     public String getName() {
@@ -45,5 +47,13 @@ public class GhostPlayer {
 
     public String getPrefix() {
         return prefix;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
     }
 }
