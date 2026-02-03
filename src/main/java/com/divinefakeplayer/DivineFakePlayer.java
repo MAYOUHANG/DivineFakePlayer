@@ -14,6 +14,8 @@ public final class DivineFakePlayer extends JavaPlugin {
     private PacketManager packetManager;
     private DeepSeekService deepSeekService;
     private SmartChatManager smartChatManager;
+    private DeathManager deathManager;
+    private ConnectionSimulator connectionSimulator;
 
     @Override
     public void onEnable() {
@@ -25,12 +27,16 @@ public final class DivineFakePlayer extends JavaPlugin {
         int ghostCount = getConfig().getInt("ghost-count", 20);
         ghostManager.initializeGhosts(ghostCount);
         packetManager = new PacketManager(this);
-        getServer().getPluginManager().registerEvents(new ConnectionListener(this, packetManager), this);
+        deathManager = new DeathManager(this);
+        connectionSimulator = new ConnectionSimulator(this, packetManager);
+        getServer().getPluginManager().registerEvents(new ConnectionListener(this, packetManager, deathManager), this);
         ProtocolLibrary.getProtocolManager().addPacketListener(new MotdListener(this));
         deepSeekService = new DeepSeekService(this);
-        smartChatManager = new SmartChatManager(this, deepSeekService);
+        smartChatManager = new SmartChatManager(this, deepSeekService, deathManager);
         getServer().getPluginManager().registerEvents(new RealPlayerChatListener(smartChatManager), this);
         smartChatManager.startIdleChat();
+        deathManager.startDeathSimulation();
+        connectionSimulator.startSimulation();
         getLogger().info("DivineFakePlayer enabled.");
     }
 

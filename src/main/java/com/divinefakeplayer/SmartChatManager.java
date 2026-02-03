@@ -6,16 +6,17 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class SmartChatManager {
 
     private final DivineFakePlayer plugin;
     private final DeepSeekService deepSeekService;
+    private final DeathManager deathManager;
 
-    public SmartChatManager(DivineFakePlayer plugin, DeepSeekService deepSeekService) {
+    public SmartChatManager(DivineFakePlayer plugin, DeepSeekService deepSeekService, DeathManager deathManager) {
         this.plugin = plugin;
         this.deepSeekService = deepSeekService;
+        this.deathManager = deathManager;
     }
 
     public void startIdleChat() {
@@ -32,7 +33,7 @@ public class SmartChatManager {
     }
 
     private void runIdleTick() {
-        List<GhostPlayer> ghosts = GhostManager.getGhosts();
+        List<GhostPlayer> ghosts = deathManager.getAliveGhosts(GhostManager.getOnlineGhosts());
         if (ghosts.isEmpty()) {
             return;
         }
@@ -49,7 +50,7 @@ public class SmartChatManager {
 
     public void triggerAI(String question) {
         deepSeekService.askAI(question, answer -> {
-            List<GhostPlayer> ghosts = new ArrayList<>(GhostManager.getGhosts());
+            List<GhostPlayer> ghosts = new ArrayList<>(deathManager.getAliveGhosts(GhostManager.getOnlineGhosts()));
             if (ghosts.isEmpty()) {
                 return;
             }
@@ -65,17 +66,18 @@ public class SmartChatManager {
                 return;
             }
             List<String> agreementPhrases = plugin.getConfig().getStringList("messages.agreement-phrases");
-            long baseDelay = 20L;
+            long lastTalkTime = 0L;
+            long sequenceDelay = lastTalkTime + 40L;
             for (int i = 1; i < responders; i++) {
                 GhostPlayer follower = ghosts.get(i);
-                long delay = baseDelay + ThreadLocalRandom.current().nextInt(60);
+                long gap = 30L + ThreadLocalRandom.current().nextInt(40);
+                sequenceDelay += gap;
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     String phrase = agreementPhrases.isEmpty()
                         ? "+1"
                         : agreementPhrases.get(ThreadLocalRandom.current().nextInt(agreementPhrases.size()));
                     broadcastFormatted(follower, phrase);
-                }, delay);
-                baseDelay = delay + 20L;
+                }, sequenceDelay);
             }
         });
     }

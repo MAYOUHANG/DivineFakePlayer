@@ -31,6 +31,19 @@ public class GhostManager {
         return Collections.unmodifiableList(instance.ghosts);
     }
 
+    public static List<GhostPlayer> getOnlineGhosts() {
+        if (instance == null) {
+            return Collections.emptyList();
+        }
+        List<GhostPlayer> onlineGhosts = new ArrayList<>();
+        for (GhostPlayer ghost : instance.ghosts) {
+            if (ghost.isOnline()) {
+                onlineGhosts.add(ghost);
+            }
+        }
+        return Collections.unmodifiableList(onlineGhosts);
+    }
+
     public void clearGhosts() {
         ghosts.clear();
     }

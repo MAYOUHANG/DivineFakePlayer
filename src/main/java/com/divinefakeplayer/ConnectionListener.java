@@ -14,20 +14,22 @@ public class ConnectionListener implements Listener {
 
     private final PacketManager packetManager;
     private final DivineFakePlayer plugin;
+    private final DeathManager deathManager;
 
-    public ConnectionListener(DivineFakePlayer plugin, PacketManager packetManager) {
+    public ConnectionListener(DivineFakePlayer plugin, PacketManager packetManager, DeathManager deathManager) {
         this.plugin = plugin;
         this.packetManager = packetManager;
+        this.deathManager = deathManager;
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        for (GhostPlayer ghost : GhostManager.getGhosts()) {
+        for (GhostPlayer ghost : GhostManager.getOnlineGhosts()) {
             packetManager.sendTabListAdd(ghost, event.getPlayer());
         }
 
         double welcomeChance = plugin.getConfig().getDouble("events.welcome-chance", 0.6);
-        List<GhostPlayer> shuffled = new ArrayList<>(GhostManager.getGhosts());
+        List<GhostPlayer> shuffled = new ArrayList<>(deathManager.getAliveGhosts(GhostManager.getOnlineGhosts()));
         Collections.shuffle(shuffled);
         int speakers = (int) Math.floor(shuffled.size() * welcomeChance);
         if (speakers <= 0) {
@@ -35,10 +37,10 @@ public class ConnectionListener implements Listener {
         }
         List<String> welcomePhrases = plugin.getConfig().getStringList("messages.welcome-phrases");
         String format = plugin.getConfig().getString("chat-format", "{prefix}{name}: {message}");
-        long baseDelay = 20L;
+        long lastTalkTime = 0L;
+        long currentDelay = lastTalkTime + 40L;
         for (int i = 0; i < speakers && i < shuffled.size(); i++) {
             GhostPlayer ghost = shuffled.get(i);
-            long delay = baseDelay + ThreadLocalRandom.current().nextInt(60);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 String phrase = welcomePhrases.isEmpty()
                     ? "Welcome!"
@@ -49,8 +51,9 @@ public class ConnectionListener implements Listener {
                     .replace("{message}", phrase);
                 message = ChatColor.translateAlternateColorCodes('&', message);
                 Bukkit.broadcastMessage(message);
-            }, delay);
-            baseDelay = delay + 20L;
+            }, currentDelay);
+            long interval = 40L + ThreadLocalRandom.current().nextInt(60);
+            currentDelay += interval;
         }
     }
 }
