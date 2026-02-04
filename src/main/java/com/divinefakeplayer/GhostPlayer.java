@@ -1,6 +1,8 @@
 package com.divinefakeplayer;
 
+import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -11,6 +13,9 @@ public class GhostPlayer {
     private final String skinTexture;
     private final String skinSignature;
     private final String prefix;
+    private final int ping;
+    private final WrappedGameProfile profile;
+    private final String displayName;
     private boolean isOnline;
 
     public GhostPlayer(String name, JavaPlugin plugin) {
@@ -26,6 +31,9 @@ public class GhostPlayer {
         } else {
             this.prefix = "";
         }
+        this.displayName = this.prefix + this.name;
+        this.ping = ThreadLocalRandom.current().nextInt(10, 101);
+        this.profile = new WrappedGameProfile(this.uuid, this.name);
         this.isOnline = true;
     }
 
@@ -47,6 +55,18 @@ public class GhostPlayer {
 
     public String getPrefix() {
         return prefix;
+    }
+
+    public int getPing() {
+        return ping;
+    }
+
+    public WrappedGameProfile getProfile() {
+        return profile;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 
     public boolean isOnline() {

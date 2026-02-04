@@ -31,7 +31,7 @@ public final class DivineFakePlayer extends JavaPlugin {
         packetManager = new PacketManager(this);
         for (Player player : Bukkit.getOnlinePlayers()) {
             for (GhostPlayer ghost : GhostManager.getOnlineGhosts()) {
-                packetManager.sendTabListAdd(ghost, player);
+                packetManager.sendTabListAdd(player, ghost);
             }
         }
         deathManager = new DeathManager(this);

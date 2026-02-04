@@ -25,7 +25,7 @@ public class ConnectionListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         for (GhostPlayer ghost : GhostManager.getOnlineGhosts()) {
-            packetManager.sendTabListAdd(ghost, event.getPlayer());
+            packetManager.sendTabListAdd(event.getPlayer(), ghost);
         }
 
         double welcomeChance = plugin.getConfig().getDouble("events.welcome-chance", 0.6);
