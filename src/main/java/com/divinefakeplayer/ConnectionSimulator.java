@@ -55,13 +55,13 @@ public class ConnectionSimulator {
 
     private void sendTabListAddAll(GhostPlayer ghost) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            packetManager.sendTabListAdd(ghost, player);
+            packetManager.sendTabListAdd(player, ghost);
         }
     }
 
     private void sendTabListRemoveAll(GhostPlayer ghost) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            packetManager.sendTabListRemove(ghost, player);
+            packetManager.sendTabListRemove(player, ghost);
         }
     }
 
