@@ -13,6 +13,7 @@ import com.comphenix.protocol.wrappers.WrappedSignedProperty;
 import java.util.Collections;
 import java.util.EnumSet;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -46,7 +47,9 @@ public class PacketManager {
             true,
             NativeGameMode.SURVIVAL,
             profile,
-            WrappedChatComponent.fromText(ghost.getDisplayName())
+            WrappedChatComponent.fromLegacyText(
+                ChatColor.translateAlternateColorCodes('&', ghost.getDisplayName())
+            )
         );
 
         packet.getPlayerInfoDataLists().write(1, Collections.singletonList(infoData));
