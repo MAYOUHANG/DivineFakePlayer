@@ -27,6 +27,8 @@ public class MotdListener extends PacketAdapter {
             int fakePlayers = GhostManager.getOnlineGhosts().size();
             int totalPlayers = realPlayers + fakePlayers;
             ping.setPlayersOnline(totalPlayers);
+            ping.setVersionProtocol(763);
+            ping.setVersionName("1.20.1");
         } catch (Exception ignored) {
         }
     }
