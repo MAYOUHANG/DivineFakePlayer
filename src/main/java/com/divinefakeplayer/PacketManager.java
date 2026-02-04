@@ -40,6 +40,7 @@ public class PacketManager {
 
         WrappedGameProfile profile = ghost.getProfile();
         applySkin(profile, ghost);
+        ghost.setRandomPing();
 
         PlayerInfoData infoData = new PlayerInfoData(
             ghost.getUuid(),

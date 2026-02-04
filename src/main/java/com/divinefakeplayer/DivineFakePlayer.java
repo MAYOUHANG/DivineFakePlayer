@@ -44,6 +44,11 @@ public final class DivineFakePlayer extends JavaPlugin {
         smartChatManager.startIdleChat();
         deathManager.startDeathSimulation();
         connectionSimulator.startSimulation();
+        Bukkit.getScheduler().runTaskTimer(this, () -> {
+            for (GhostPlayer ghost : GhostManager.getOnlineGhosts()) {
+                packetManager.updateTabForAll(ghost);
+            }
+        }, 20L * 30, 20L * 30);
         getLogger().info("DivineFakePlayer enabled.");
     }
 
