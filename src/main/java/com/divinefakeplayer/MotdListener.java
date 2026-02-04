@@ -11,7 +11,7 @@ import org.bukkit.plugin.Plugin;
 public class MotdListener extends PacketAdapter {
 
     public MotdListener(Plugin plugin) {
-        super(plugin, ListenerPriority.NORMAL, PacketType.Status.Server.SERVER_INFO);
+        super(plugin, ListenerPriority.HIGHEST, PacketType.Status.Server.SERVER_INFO);
     }
 
     @Override

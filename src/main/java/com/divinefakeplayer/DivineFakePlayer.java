@@ -2,8 +2,10 @@ package com.divinefakeplayer;
 
 import net.milkbowl.vault.chat.Chat;
 import com.comphenix.protocol.ProtocolLibrary;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -27,6 +29,11 @@ public final class DivineFakePlayer extends JavaPlugin {
         int ghostCount = getConfig().getInt("ghost-count", 20);
         ghostManager.initializeGhosts(ghostCount);
         packetManager = new PacketManager(this);
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            for (GhostPlayer ghost : GhostManager.getOnlineGhosts()) {
+                packetManager.sendTabListAdd(ghost, player);
+            }
+        }
         deathManager = new DeathManager(this);
         connectionSimulator = new ConnectionSimulator(this, packetManager);
         getServer().getPluginManager().registerEvents(new ConnectionListener(this, packetManager, deathManager), this);

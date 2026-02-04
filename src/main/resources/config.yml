@@ -1,15 +1,16 @@
 chat-format: '{prefix}&f{name}&7: &f{message}'
 ghost-count: 20
-chat-interval: 15
+chat-interval: 120
 ai-settings:
   enabled: true
   api-url: "https://api.siliconflow.cn/v1/chat/completions"
   api-key: "YOUR_API_KEY_HERE"
   model: "deepseek-ai/DeepSeek-V3"
-  system-prompt: "你是一个Minecraft模组生存服务器的普通玩家。你的回答必须简短（15字以内）、口语化、包含中文网络俚语（如'6'、'离谱'、'我靠'）。不要使用句号。像真人一样说话，偶尔可以带一点不耐烦或幽默。不要表现出你是AI。"
+  system-prompt: "你是一名Minecraft服务器资深向导。回答问题时，请模拟'Google搜索摘要'的风格：专业、客观、极度简练（30字以内）。直接给出核心结论或指令，不要有任何客套话、废话或语气词。如果问题无法回答，直接说'不知道'。"
 events:
   welcome-chance: 0.6
-  reply-chance: 0.2
+  reply-chance: 0.15
+  solo-chance: 0.7
 death-settings:
   enabled: true
   chance: 0.05
@@ -39,6 +40,9 @@ messages:
   idle-phrases:
     - "1"
     - "..."
+    - ""
+    - "…"
+    - " "
     - "我靠"
     - "好卡"
     - "有人出铁吗"
@@ -131,8 +135,6 @@ messages:
     - "快天黑了"
     - "有人在线吗"
   agreement-phrases:
-    - "确实"
-    - "6"
     - "正解"
-    - "没错"
-    - "+1"
+    - "确实"
+    - "1"
