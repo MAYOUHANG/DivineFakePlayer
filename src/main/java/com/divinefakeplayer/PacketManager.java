@@ -17,17 +17,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PacketManager {
-    private static final PacketType INFO_UPDATE_PACKET = PacketType.findCurrent(
-        PacketType.Protocol.PLAY,
-        PacketType.Sender.SERVER,
-        "PLAYER_INFO_UPDATE"
-    );
-
-    private static final PacketType INFO_REMOVE_PACKET = PacketType.findCurrent(
-        PacketType.Protocol.PLAY,
-        PacketType.Sender.SERVER,
-        "PLAYER_INFO_REMOVE"
-    );
+    private static final PacketType INFO_UPDATE_PACKET = PacketType.Play.Server.PLAYER_INFO_UPDATE;
+    private static final PacketType INFO_REMOVE_PACKET = PacketType.Play.Server.PLAYER_INFO_REMOVE;
 
     private static final EnumSet<EnumWrappers.PlayerInfoAction> TAB_LIST_ACTIONS = EnumSet.of(
         EnumWrappers.PlayerInfoAction.ADD_PLAYER,
