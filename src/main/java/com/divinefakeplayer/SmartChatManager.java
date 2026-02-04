@@ -37,7 +37,7 @@ public class SmartChatManager {
         if (ghosts.isEmpty()) {
             return;
         }
-        if (ThreadLocalRandom.current().nextDouble() < 0.5) {
+        if (ThreadLocalRandom.current().nextDouble() > 0.4) {
             return;
         }
         GhostPlayer ghost = ghosts.get(ThreadLocalRandom.current().nextInt(ghosts.size()));
@@ -62,9 +62,15 @@ public class SmartChatManager {
             GhostPlayer lead = ghosts.get(0);
             broadcastFormatted(lead, answer);
 
+            double soloChance = plugin.getConfig().getDouble("events.solo-chance", 0.7);
+            if (ThreadLocalRandom.current().nextDouble() < soloChance) {
+                return;
+            }
+
             if (responders <= 1) {
                 return;
             }
+            responders = Math.min(responders, ThreadLocalRandom.current().nextInt(2) + 1);
             List<String> agreementPhrases = plugin.getConfig().getStringList("messages.agreement-phrases");
             long lastTalkTime = 0L;
             long sequenceDelay = lastTalkTime + 40L;
