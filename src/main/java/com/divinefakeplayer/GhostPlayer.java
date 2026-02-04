@@ -13,7 +13,7 @@ public class GhostPlayer {
     private final String skinTexture;
     private final String skinSignature;
     private final String prefix;
-    private final int ping;
+    private int ping;
     private final WrappedGameProfile profile;
     private final String displayName;
     private boolean isOnline;
@@ -32,7 +32,7 @@ public class GhostPlayer {
             this.prefix = "";
         }
         this.displayName = this.prefix + this.name;
-        this.ping = 40 + new Random().nextInt(60);
+        setRandomPing();
         this.profile = new WrappedGameProfile(this.uuid, this.name);
         this.isOnline = true;
     }
@@ -59,6 +59,10 @@ public class GhostPlayer {
 
     public int getPing() {
         return ping;
+    }
+
+    public void setRandomPing() {
+        this.ping = 40 + new Random().nextInt(100);
     }
 
     public WrappedGameProfile getProfile() {
