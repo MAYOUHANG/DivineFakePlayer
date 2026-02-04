@@ -32,7 +32,7 @@ public class GhostPlayer {
             this.prefix = "";
         }
         this.displayName = this.prefix + this.name;
-        this.ping = ThreadLocalRandom.current().nextInt(40, 150);
+        this.ping = ThreadLocalRandom.current().nextInt(40, 301);
         this.profile = new WrappedGameProfile(this.uuid, this.name);
         this.isOnline = true;
     }
@@ -62,7 +62,7 @@ public class GhostPlayer {
     }
 
     public void setRandomPing() {
-        this.ping = ThreadLocalRandom.current().nextInt(40, 150);
+        this.ping = ThreadLocalRandom.current().nextInt(40, 301);
     }
 
     public WrappedGameProfile getProfile() {
