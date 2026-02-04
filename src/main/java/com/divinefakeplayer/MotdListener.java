@@ -13,17 +13,19 @@ public class MotdListener extends PacketAdapter {
     private final Plugin plugin;
 
     public MotdListener(Plugin plugin) {
-        super(plugin, ListenerPriority.HIGHEST, PacketType.Status.Server.SERVER_INFO);
+        super(PacketAdapter.params(plugin, PacketType.Status.Server.SERVER_INFO)
+            .listenerPriority(ListenerPriority.HIGHEST)
+            .optionAsync());
         this.plugin = plugin;
     }
 
     @Override
     public void onPacketSending(PacketEvent event) {
         WrappedServerPing ping = event.getPacket().getServerPings().read(0);
-        int fakeCount = GhostManager.getOnlineGhosts().size();
-        int realCount = Bukkit.getOnlinePlayers().size();
-        int online = realCount + fakeCount;
-        plugin.getLogger().info("DEBUG: MOTD Packet intercepted. Setting count to: " + online);
-        ping.setPlayersOnline(online);
+        int ghostCount = GhostManager.getOnlineGhosts().size();
+        int realPlayers = Bukkit.getOnlinePlayers().size();
+        int total = realPlayers + ghostCount;
+        ping.setPlayersOnline(total);
+        plugin.getLogger().info("DEBUG: Async MOTD updated to " + total);
     }
 }
