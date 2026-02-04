@@ -17,8 +17,24 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PacketManager {
-    private static final PacketType INFO_UPDATE_PACKET = PacketType.Play.Server.PLAYER_INFO_UPDATE;
-    private static final PacketType INFO_REMOVE_PACKET = PacketType.Play.Server.PLAYER_INFO_REMOVE;
+    private static final PacketType INFO_UPDATE_PACKET;
+    private static final PacketType INFO_REMOVE_PACKET;
+
+    static {
+        PacketType updatePacket = null;
+        PacketType removePacket = null;
+        try {
+            java.lang.reflect.Field updateField = PacketType.Play.Server.class.getField("PLAYER_INFO_UPDATE");
+            updatePacket = (PacketType) updateField.get(null);
+
+            java.lang.reflect.Field removeField = PacketType.Play.Server.class.getField("PLAYER_INFO_REMOVE");
+            removePacket = (PacketType) removeField.get(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        INFO_UPDATE_PACKET = updatePacket;
+        INFO_REMOVE_PACKET = removePacket;
+    }
 
     private static final EnumSet<EnumWrappers.PlayerInfoAction> TAB_LIST_ACTIONS = EnumSet.of(
         EnumWrappers.PlayerInfoAction.ADD_PLAYER,
@@ -36,6 +52,10 @@ public class PacketManager {
     }
 
     public void sendTabListAdd(GhostPlayer ghost, Player receiver) {
+        if (INFO_UPDATE_PACKET == null) {
+            plugin.getLogger().severe("PLAYER_INFO_UPDATE packet type unavailable. Check ProtocolLib version.");
+            return;
+        }
         PacketContainer packet = protocolManager.createPacket(INFO_UPDATE_PACKET);
         packet.getPlayerInfoActions().write(0, TAB_LIST_ACTIONS);
 
@@ -64,6 +84,10 @@ public class PacketManager {
     }
 
     public void sendTabListRemove(GhostPlayer ghost, Player receiver) {
+        if (INFO_REMOVE_PACKET == null) {
+            plugin.getLogger().severe("PLAYER_INFO_REMOVE packet type unavailable. Check ProtocolLib version.");
+            return;
+        }
         PacketContainer packet = protocolManager.createPacket(INFO_REMOVE_PACKET);
         packet.getUUIDLists().write(0, List.of(ghost.getUuid()));
 
